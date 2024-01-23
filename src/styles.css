@@ -1,1 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+/* TODO: font weight */
+@import url('https://fonts.googleapis.com/css2?family=Roboto');
+@import url('https://fonts.googleapis.com/css2?family=Rubik');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
