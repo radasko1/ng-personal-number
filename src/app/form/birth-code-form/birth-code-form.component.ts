@@ -60,6 +60,7 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
     /** Error message for invalid number */
     protected invalidPatternMsg = invalidPatternMsg;
 
+    /** Whether the code pass pattern, then it's emitted */
     @Output() onCodeChange$ = this.personalCode.asObservable();
 
     constructor(private fb: NonNullableFormBuilder) {}
@@ -69,11 +70,19 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
             .pipe(debounceTime(800), takeUntil(this.subs$))
             .subscribe({
                 next: (value) => {
-                    this.hasPatternError =
-                        this.formGroup.controls.code.hasError('pattern');
+                    const codeControl = this.formGroup.controls.code;
+                    // better be part of some object with all error, where you can check each of them
+                    this.hasPatternError = codeControl.hasError('pattern');
+
+                    if (codeControl.errors) {
+                        return;
+                    }
+
+                    // whether code is not valid, don't send
                     this.personalCode.next(value);
                 },
                 error: (err) => {
+                    // do I need do something with error?
                     console.log(err);
                 },
             });

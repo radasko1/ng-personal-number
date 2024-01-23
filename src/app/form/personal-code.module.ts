@@ -15,4 +15,4 @@ import { BirthCodeInfoComponent } from './birth-code-info/birth-code-info.compon
     exports: [BirthCodeComponent],
     imports: [CommonModule, ReactiveFormsModule],
 })
-export class FormModule {}
+export class PersonalCodeModule {}

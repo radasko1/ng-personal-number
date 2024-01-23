@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { FormModule } from './form/form.module';
+import { PersonalCodeModule } from './form/personal-code.module';
 
 @NgModule({
     declarations: [AppComponent],
-    imports: [BrowserModule, FormModule],
+    imports: [BrowserModule, PersonalCodeModule],
     providers: [],
     bootstrap: [AppComponent],
 })
