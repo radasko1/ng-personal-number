@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
-import { NonNullableFormBuilder, Validators } from '@angular/forms'
-import { debounceTime, Subject, takeUntil } from 'rxjs'
+import { Component, OnDestroy, OnInit, Output } from '@angular/core';
+import { NonNullableFormBuilder, Validators } from '@angular/forms';
+import { debounceTime, Subject, takeUntil } from 'rxjs';
 
 // TODO: json file for error messages?
-const invalidPatternMsg = 'Zadaná hodnota není validní'
+const invalidPatternMsg = 'Zadaná hodnota není validní';
 
 @Component({
     selector: 'app-birth-code-form',
@@ -18,11 +18,15 @@ const invalidPatternMsg = 'Zadaná hodnota není validní'
                     maxlength="6"
                     formControlName="code"
                 />
-                <label class="text-[60px] inline-block mx-2.5 leading-[60px]">
-                    /
+                <label
+                    class="text-[60px] inline-block mx-2.5 leading-[60px] select-none"
+                >
+                    &#8725;
                 </label>
-                <label class="text-[50px] inline-block leading-[50px]">
-                    XXXX
+                <label
+                    class="text-[50px] inline-block leading-[50px] select-none"
+                >
+                    &Star;&Star;&Star;&Star;
                 </label>
             </div>
         </form>
@@ -43,17 +47,20 @@ const invalidPatternMsg = 'Zadaná hodnota není validní'
     `,
 })
 export class BirthCodeFormComponent implements OnInit, OnDestroy {
-    private subs$ = new Subject<boolean>()
+    private subs$ = new Subject<boolean>();
+    private personalCode = new Subject<string>();
     /** Form for birth code number */
     protected formGroup = this.fb.group({
-        code: this.fb.control<string>('', {
-            validators: [Validators.pattern(new RegExp(/[0-9]{6}/))],
+        code: this.fb.control<string>('000000', {
+            validators: [Validators.pattern('[0-9]{6}')],
         }),
-    })
+    });
     /** Error message indicator */
-    protected hasPatternError = false
+    protected hasPatternError = false;
     /** Error message for invalid number */
-    protected invalidPatternMsg = invalidPatternMsg
+    protected invalidPatternMsg = invalidPatternMsg;
+
+    @Output() onCodeChange$ = this.personalCode.asObservable();
 
     constructor(private fb: NonNullableFormBuilder) {}
 
@@ -63,13 +70,17 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: (value) => {
                     this.hasPatternError =
-                        this.formGroup.controls.code.hasError('pattern')
+                        this.formGroup.controls.code.hasError('pattern');
+                    this.personalCode.next(value);
                 },
-            })
+                error: (err) => {
+                    console.log(err);
+                },
+            });
     }
 
     ngOnDestroy() {
-        this.subs$.next(true)
-        this.subs$.unsubscribe()
+        this.subs$.next(true);
+        this.subs$.unsubscribe();
     }
 }

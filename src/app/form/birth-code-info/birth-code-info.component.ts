@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { Component, Input } from '@angular/core';
 
 @Component({
     selector: 'app-birth-code-info',
@@ -8,13 +8,20 @@ import { Component, Input } from '@angular/core'
             [class.mb-4]="!isLast"
             [class.mb-0]="isLast"
         >
-            <div class="leading-[24px] inline-block font-normal">{{ title }}:</div>
-            <div class="ml-3 leading-[24px] inline-block font-semibold">{{ value }}</div>
+            <div class="leading-[24px] inline-block font-normal">
+                {{ title }}:
+            </div>
+            <div class="ml-3 leading-[24px] inline-block font-semibold">
+                {{ value }}
+            </div>
         </div>
     `,
 })
 export class BirthCodeInfoComponent {
-    @Input() title = ''
-    @Input() value: string | number = '-'
-    @Input() isLast = false
+    /** Data key title */
+    @Input() title = '';
+    /** Data key value */
+    @Input() value: string | number = '-';
+    /** Whether is item last in list */
+    @Input() isLast = false;
 }

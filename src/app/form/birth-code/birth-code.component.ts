@@ -1,12 +1,12 @@
-import { Component } from '@angular/core'
+import { Component } from '@angular/core';
 
 @Component({
     selector: 'app-birth-code',
     template: `
-        <app-birth-code-form />
+        <app-birth-code-form (onCodeChange$)="onCodeChange($event)" />
 
         <!-- TODO: cycle from list -->
-        <div class="">
+        <div>
             <app-birth-code-info title="Pohlaví" />
             <app-birth-code-info title="Věk" />
             <app-birth-code-info title="Den v týdnu" />
@@ -14,4 +14,8 @@ import { Component } from '@angular/core'
         </div>
     `,
 })
-export class BirthCodeComponent {}
+export class BirthCodeComponent {
+    protected onCodeChange(code: string) {
+        console.log('code changed:', code);
+    }
+}
