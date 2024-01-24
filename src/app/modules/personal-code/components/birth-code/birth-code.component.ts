@@ -1,47 +1,32 @@
 import { Component } from '@angular/core';
+import { KeyValue } from '@angular/common';
 import moment, { Moment } from 'moment';
 import 'moment/locale/cs.js';
 
-import locale from '../../locale/root.locale.json';
-import { Gender } from '../../models/gender.type';
-import { PersonalCode } from '../../models/personal-code.interface';
-import { weekDay } from '../../constants/week-day.constant';
+import locale from '../../../../locale/root.locale.json';
+import { PersonalCode } from '../../../../models/personal-code.interface';
+import { weekDay } from '../../../../constants/week-day.constant';
+import { KeyValuePair } from '../../../../models/key-value.interface';
 
 @Component({
     selector: 'app-birth-code',
     template: `
         <app-birth-code-form (onCodeChange$)="onCodeChange($event)" />
-
         <div>
             <app-birth-code-info
-                [title]="locale['GENDER']"
-                [value]="this.gender ? locale[this.gender] : undefined"
-            />
-            <app-birth-code-info [title]="locale['AGE']" [value]="age" />
-            <app-birth-code-info
-                [title]="locale['WEEKDAY']"
-                [value]="dayInWeek"
-            />
-            <app-birth-code-info
-                [title]="locale['BIRTHDAY_DATE']"
-                [value]="birthDate"
-                [isLast]="true"
+                *ngFor="let info of personInfo | keyvalue: sortFn"
+                [title]="locale[info.key]"
+                [value]="info.value"
+                [isLast]="false"
             />
         </div>
     `,
 })
 export class BirthCodeComponent {
     private personalCode: PersonalCode | undefined;
-    protected readonly locale = locale;
-
-    /** Gender type calculated from month date */
-    protected gender: Gender | undefined;
-    /** Age calculated from date */
-    protected age: number | undefined;
-    /** Day in week calculated from birthdate */
-    protected dayInWeek: string | undefined;
-    /** Birthdate in locale format */
-    protected birthDate: string | undefined;
+    protected readonly locale: KeyValuePair<string> = locale;
+    // I choose Map to keep order of assigned values
+    protected personInfo = new Map<string, string>();
 
     /**
      * Handle personal code written by user
@@ -114,9 +99,9 @@ export class BirthCodeComponent {
         const monthNum = parseInt(month, 10);
 
         if (monthNum >= 1 && monthNum <= 12) {
-            this.gender = 'MALE';
+            this.personInfo.set('GENDER', locale['MALE']);
         } else if (monthNum >= 51 && monthNum <= 62) {
-            this.gender = 'FEMALE';
+            this.personInfo.set('GENDER', locale['FEMALE']);
         }
     }
 
@@ -132,7 +117,7 @@ export class BirthCodeComponent {
         const todayDate = moment();
         const difference = todayDate.diff(birthDate, 'year');
 
-        this.age = difference;
+        this.personInfo.set('AGE', difference.toString());
     }
 
     /**
@@ -146,7 +131,7 @@ export class BirthCodeComponent {
 
         const weekDayISO = birthDate.isoWeekday();
 
-        this.dayInWeek = weekDay[weekDayISO - 1];
+        this.personInfo.set('WEEKDAY', weekDay[weekDayISO - 1]);
     }
 
     private calculateBirthday() {
@@ -155,7 +140,10 @@ export class BirthCodeComponent {
             return;
         }
 
-        this.birthDate = birthDate.locale('cs-cz').format('LL');
+        this.personInfo.set(
+            'BIRTHDAY_DATE',
+            birthDate.locale('cs-cz').format('LL'),
+        );
     }
 
     /**
@@ -195,5 +183,17 @@ export class BirthCodeComponent {
         const birthDate = moment([year, month - 1, day]);
 
         return birthDate;
+    }
+
+    /**
+     * KeyValue pipe compare function
+     * @param a
+     * @param b
+     */
+    protected sortFn(
+        a: KeyValue<string, string>,
+        b: KeyValue<string, string>,
+    ): number {
+        return 0;
     }
 }
