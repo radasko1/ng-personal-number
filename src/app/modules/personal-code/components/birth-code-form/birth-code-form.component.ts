@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, Output } from '@angular/core';
 import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 
-import locale from '../../../../locale/root.locale.json';
+import locale from '../../../../shared/locale/root.locale.json';
 
 @Component({
     selector: 'app-birth-code-form',

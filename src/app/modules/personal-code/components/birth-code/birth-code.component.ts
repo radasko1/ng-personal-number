@@ -3,10 +3,10 @@ import { KeyValue } from '@angular/common';
 import moment, { Moment } from 'moment';
 import 'moment/locale/cs.js';
 
-import locale from '../../../../locale/root.locale.json';
-import { PersonalCode } from '../../../../models/personal-code.interface';
-import { WEEK_DAY } from '../../../../constants/week-day.constant';
-import { KeyValuePair } from '../../../../models/key-value.interface';
+import locale from '../../../../shared/locale/root.locale.json';
+import { PersonalCode } from '../../models/personal-code.interface';
+import { WEEK_DAY } from '../../../../shared/constants/week-day.constant';
+import { KeyValuePair } from '../../../../shared/models/key-value.interface';
 
 @Component({
     selector: 'app-birth-code',
