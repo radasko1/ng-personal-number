@@ -2,8 +2,7 @@ import { Component, OnDestroy, OnInit, Output } from '@angular/core';
 import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 
-// TODO: json file for error messages?
-const invalidPatternMsg = 'Zadaná hodnota není validní';
+import locale from '../../../../locale/root.locale.json';
 
 @Component({
     selector: 'app-birth-code-form',
@@ -41,7 +40,7 @@ const invalidPatternMsg = 'Zadaná hodnota není validní';
                 *ngIf="hasPatternError"
                 class="block text-yellow leading-[20px] text-lg font-medium"
             >
-                {{ invalidPatternMsg }}
+                {{ locale.INVALID_PATTERN }}
             </div>
         </div>
     `,
@@ -49,6 +48,7 @@ const invalidPatternMsg = 'Zadaná hodnota není validní';
 export class BirthCodeFormComponent implements OnInit, OnDestroy {
     private subs$ = new Subject<boolean>();
     private personalCode = new Subject<string>();
+    protected readonly locale = locale;
     /** Form for birth code number */
     protected formGroup = this.fb.group({
         code: this.fb.control<string>('000000', {
@@ -57,8 +57,6 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
     });
     /** Error message indicator */
     protected hasPatternError = false;
-    /** Error message for invalid number */
-    protected invalidPatternMsg = invalidPatternMsg;
 
     /** Whether the code pass pattern, then it's emitted */
     @Output() onCodeChange$ = this.personalCode.asObservable();

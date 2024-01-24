@@ -1,4 +1,4 @@
-export const weekDay = [
+export const WEEK_DAY = [
     'Pondělí',
     'Úterý',
     'Středa',

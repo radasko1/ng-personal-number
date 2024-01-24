@@ -5,7 +5,7 @@ import 'moment/locale/cs.js';
 
 import locale from '../../../../locale/root.locale.json';
 import { PersonalCode } from '../../../../models/personal-code.interface';
-import { weekDay } from '../../../../constants/week-day.constant';
+import { WEEK_DAY } from '../../../../constants/week-day.constant';
 import { KeyValuePair } from '../../../../models/key-value.interface';
 
 @Component({
@@ -14,10 +14,13 @@ import { KeyValuePair } from '../../../../models/key-value.interface';
         <app-birth-code-form (onCodeChange$)="onCodeChange($event)" />
         <div>
             <app-birth-code-info
-                *ngFor="let info of personInfo | keyvalue: sortFn"
+                *ngFor="
+                    let info of personInfo | keyvalue: sortFn;
+                    last as isLast
+                "
                 [title]="locale[info.key]"
                 [value]="info.value"
-                [isLast]="false"
+                [isLast]="isLast"
             />
         </div>
     `,
@@ -131,7 +134,7 @@ export class BirthCodeComponent {
 
         const weekDayISO = birthDate.isoWeekday();
 
-        this.personInfo.set('WEEKDAY', weekDay[weekDayISO - 1]);
+        this.personInfo.set('WEEKDAY', WEEK_DAY[weekDayISO - 1]);
     }
 
     private calculateBirthday() {
