@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit, Output } from '@angular/core';
 import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
+import moment from 'moment';
 
 import locale from '../../../../shared/locale/root.locale.json';
+import { ParsedCode } from '../../models/parsed-code.interface';
 
 @Component({
     selector: 'app-birth-code-form',
@@ -47,16 +49,17 @@ import locale from '../../../../shared/locale/root.locale.json';
 })
 export class BirthCodeFormComponent implements OnInit, OnDestroy {
     private subs$ = new Subject<boolean>();
-    private personalCode = new Subject<string>();
+    private personalCode = new Subject<ParsedCode>();
     protected readonly locale = locale;
     /** Form for birth code number */
     protected formGroup = this.fb.group({
         code: this.fb.control<string>('000000', {
+            // basic regex to control pattern validity (because February month)
             validators: [Validators.pattern('[0-9]{6}')],
         }),
     });
     /** Error message indicator */
-    protected hasPatternError = false;
+    protected hasPatternError = false; // TODO: will be more errors
 
     /** Whether the code pass pattern, then it's emitted */
     @Output() onCodeChange$ = this.personalCode.asObservable();
@@ -72,12 +75,22 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
                     // better be part of some object with all error, where you can check each of them
                     this.hasPatternError = codeControl.hasError('pattern');
 
-                    if (codeControl.errors) {
+                    // TODO: custom validator, date validator?
+                    const parsedCode = this.parseCode(value);
+                    const [year, month, day] = parsedCode.date;
+                    const isDateValid = this.checkDateValidity(
+                        year,
+                        month,
+                        day,
+                    );
+
+                    // TODO: error use-cases - not all number digits; not valid date
+                    if (codeControl.errors || !isDateValid) {
                         return;
                     }
 
                     // whether code is not valid, don't send
-                    this.personalCode.next(value);
+                    this.personalCode.next(parsedCode);
                 },
                 error: (err) => {
                     // do I need do something with error?
@@ -89,5 +102,71 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this.subs$.next(true);
         this.subs$.unsubscribe();
+    }
+
+    /**
+     * Parse written code
+     * @param codeValue Written value in form input
+     */
+    private parseCode(codeValue: string): ParsedCode {
+        const code = codeValue.trim();
+
+        // string values
+        const yearDigits = code.substring(0, 2);
+        const monthDigits = code.substring(2, 4);
+        const dayDigits = code.substring(4, 6);
+
+        // number values
+        const yearNum = parseInt(yearDigits, 10);
+        const monthNum = parseInt(monthDigits, 10);
+        const day = parseInt(dayDigits, 10);
+        const year = this.getFullYear(yearNum);
+        const month = this.getFullMonth(monthNum); // may return -1
+
+        return {
+            date: [year, month, day],
+            digits: [yearDigits, monthDigits, dayDigits],
+        };
+    }
+
+    /**
+     * Check if written date is valid
+     * @param year Year number
+     * @param month Index of month (0 is for January)
+     * @param day Day number
+     */
+    private checkDateValidity(
+        year: number,
+        month: number,
+        day: number,
+    ): boolean {
+        const date = moment([year, month - 1, day]);
+
+        return date.isValid();
+    }
+
+    /**
+     * Get full year from personal code
+     * @param year Last 2 digits from year
+     */
+    private getFullYear(year: number): number {
+        if (year >= 54 && year <= 99) {
+            return parseInt('19' + year, 10);
+        }
+        return parseInt('20' + year, 10);
+    }
+
+    /**
+     * Get correct month from personal code
+     * @param month Digits from code
+     */
+    private getFullMonth(month: number): number {
+        if (month >= 1 && month <= 12) {
+            return month;
+        } else if (month >= 51 && month <= 62) {
+            return month - 50;
+        } else {
+            return -1;
+        }
     }
 }
