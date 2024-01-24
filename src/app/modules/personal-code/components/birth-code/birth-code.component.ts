@@ -4,7 +4,6 @@ import moment, { Moment } from 'moment';
 import 'moment/locale/cs.js';
 
 import locale from '../../../../shared/locale/root.locale.json';
-import { WEEK_DAY } from '../../../../shared/constants/week-day.constant';
 import { KeyValuePair } from '../../../../shared/models/key-value.interface';
 import { ParsedCode } from '../../models/parsed-code.interface';
 
@@ -35,8 +34,7 @@ export class BirthCodeComponent {
      * @param code Parsed data = date + digits from code
      */
     protected onCodeChange(code: ParsedCode) {
-        const { date } = code;
-        const [year, month, day] = date;
+        const [year, month, day] = code.date;
         const birthdayDate = moment([year, month - 1, day]);
 
         this.calculateGender(month);
@@ -73,9 +71,9 @@ export class BirthCodeComponent {
      * @param birthdayDate Birthday date in Moment date object
      */
     private calculateWeekDay(birthdayDate: Moment) {
-        const weekDayISO = birthdayDate.isoWeekday();
+        const dayName = birthdayDate.format('dddd');
 
-        this.personInfo.set('WEEKDAY', WEEK_DAY[weekDayISO - 1]);
+        this.personInfo.set('WEEKDAY', dayName);
     }
 
     /**

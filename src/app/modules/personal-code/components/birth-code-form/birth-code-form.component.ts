@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, Output } from '@angular/core';
 import { NonNullableFormBuilder, Validators } from '@angular/forms';
-import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { debounceTime, noop, Subject, takeUntil } from 'rxjs';
 import moment from 'moment';
 
 import locale from '../../../../shared/locale/root.locale.json';
@@ -75,7 +75,7 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
                     // better be part of some object with all error, where you can check each of them
                     this.hasPatternError = codeControl.hasError('pattern');
 
-                    // TODO: custom validator, date validator?
+                    // custom validator, date validator?
                     const parsedCode = this.parseCode(value);
                     const [year, month, day] = parsedCode.date;
                     const isDateValid = this.checkDateValidity(
@@ -92,10 +92,7 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
                     // whether code is not valid, don't send
                     this.personalCode.next(parsedCode);
                 },
-                error: (err) => {
-                    // do I need do something with error?
-                    console.log(err);
-                },
+                error: (err) => noop(),
             });
     }
 
@@ -105,7 +102,7 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Parse written code
+     * Parse written code into small pieces
      * @param codeValue Written value in form input
      */
     private parseCode(codeValue: string): ParsedCode {
@@ -131,9 +128,9 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
 
     /**
      * Check if written date is valid
-     * @param year Year number
-     * @param month Index of month (0 is for January)
-     * @param day Day number
+     * @param year Date year
+     * @param month Date month
+     * @param day Date day
      */
     private checkDateValidity(
         year: number,
@@ -158,7 +155,7 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
 
     /**
      * Get correct month from personal code
-     * @param month Digits from code
+     * @param month Date month number
      */
     private getFullMonth(month: number): number {
         if (month >= 1 && month <= 12) {
