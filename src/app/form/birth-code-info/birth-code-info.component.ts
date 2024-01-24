@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
     selector: 'app-birth-code-info',
@@ -17,11 +17,18 @@ import { Component, Input } from '@angular/core';
         </div>
     `,
 })
-export class BirthCodeInfoComponent {
+export class BirthCodeInfoComponent implements OnInit {
     /** Data key title */
     @Input() title = '';
     /** Data key value */
-    @Input() value: string | number = '-';
+    @Input() value: string | number | undefined;
     /** Whether is item last in list */
     @Input() isLast = false;
+
+    ngOnInit() {
+        // default value
+        if (!this.value) {
+            this.value = '-';
+        }
+    }
 }
