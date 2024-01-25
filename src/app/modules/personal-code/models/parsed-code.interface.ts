@@ -1,5 +1,4 @@
-// TODO: better name for data about date and written code
-export interface ParsedCode {
+export interface FormValue {
     date: number[];
     digits: string[];
 }

@@ -4,7 +4,7 @@ import { debounceTime, noop, Subject, takeUntil } from 'rxjs';
 import moment from 'moment';
 
 import locale from '../../../../shared/locale/root.locale.json';
-import { ParsedCode } from '../../models/parsed-code.interface';
+import { FormValue } from '../../models/parsed-code.interface';
 
 @Component({
 	selector: 'app-birth-code-form',
@@ -15,7 +15,10 @@ import { ParsedCode } from '../../models/parsed-code.interface';
 					type="text"
 					class="text-[50px] h-[60px] bg-transparent text-right w-[175px] focus:outline-none"
 					maxlength="6"
+					placeholder="000000"
 					formControlName="code"
+					tabindex="0"
+					autofocus
 				/>
 				<label class="text-[60px] inline-block mx-2.5 leading-[60px] select-none">
 					&#8725;
@@ -26,13 +29,13 @@ import { ParsedCode } from '../../models/parsed-code.interface';
 			</div>
 		</form>
 		<!-- Form Error Message -->
-		<div
-			[class.hidden]="!errorMsgs.length"
-			[class.block]="errorMsgs.length"
-			class="text-center mt-2 font-roboto text-yellow text-lg font-medium"
-		>
-			<!-- TODO: absolute space for error message -->
-			<div *ngFor="let error of errorMsgs" class="block leading-[20px]">
+		<div class="block text-center mt-2 font-roboto text-yellow text-lg font-medium h-[20px]">
+			<div
+				*ngFor="let error of errorMsgs"
+				[class.block]="error"
+				[class.hidden]="!error"
+				class="leading-[20px]"
+			>
 				{{ error }}
 			</div>
 		</div>
@@ -43,7 +46,7 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
 	protected readonly locale = locale;
 	/** Form for birth code number */
 	protected formGroup = this.fb.group({
-		code: this.fb.control<string>('000000', {
+		code: this.fb.control<string>('', {
 			// basic regex to control pattern validity (because February month)
 			validators: [Validators.pattern('[0-9]{6}')],
 		}),
@@ -52,7 +55,7 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
 	protected errorMsgs: string[] = [];
 
 	/** Whether the code pass pattern, then it's emitted */
-	@Output() onValueChange = new EventEmitter<ParsedCode>(); // TODO event instead of Subject?
+	@Output() onValueChange = new EventEmitter<FormValue | undefined>();
 
 	constructor(private fb: NonNullableFormBuilder) {}
 
@@ -66,8 +69,8 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
 
 					if (codeControl.hasError('pattern')) {
 						this.errorMsgs.push(locale['INVALID_PATTERN']);
+						this.onValueChange.next(undefined);
 						return;
-						// emit output?
 					}
 
 					// custom validator, date validator?
@@ -77,8 +80,8 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
 
 					if (!isDateValid) {
 						this.errorMsgs.push(locale['INVALID_DATE']);
+						this.onValueChange.next(undefined);
 						return;
-						// emit output?
 					}
 
 					// whether code is not valid, don't send
@@ -97,7 +100,7 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
 	 * Parse written code into small pieces
 	 * @param codeValue Written value in form input
 	 */
-	private parseCode(codeValue: string): ParsedCode {
+	private parseCode(codeValue: string): FormValue {
 		const code = codeValue.trim();
 
 		// string values
