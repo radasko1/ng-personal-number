@@ -33,16 +33,13 @@ import { ParsedCode } from '../../models/parsed-code.interface';
         </form>
         <!-- Form Error Message -->
         <div
-            [class.hidden]="!hasPatternError"
-            [class.block]="hasPatternError"
-            class="text-center mt-2 font-roboto"
+            [class.hidden]="!errorMsgs.length"
+            [class.block]="errorMsgs.length"
+            class="text-center mt-2 font-roboto text-yellow text-lg font-medium"
         >
             <!-- TODO: absolute space for error message -->
-            <div
-                *ngIf="hasPatternError"
-                class="block text-yellow leading-[20px] text-lg font-medium"
-            >
-                {{ locale.INVALID_PATTERN }}
+            <div *ngFor="let error of errorMsgs" class="block leading-[20px]">
+                {{ error }}
             </div>
         </div>
     `,
@@ -59,7 +56,7 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
         }),
     });
     /** Error message indicator */
-    protected hasPatternError = false; // TODO: will be more errors
+    protected errorMsgs: string[] = [];
 
     /** Whether the code pass pattern, then it's emitted */
     @Output() onCodeChange$ = this.personalCode.asObservable();
@@ -71,9 +68,13 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
             .pipe(debounceTime(800), takeUntil(this.subs$))
             .subscribe({
                 next: (value) => {
+                    this.errorMsgs = []; // cleaning
                     const codeControl = this.formGroup.controls.code;
-                    // better be part of some object with all error, where you can check each of them
-                    this.hasPatternError = codeControl.hasError('pattern');
+
+                    if (codeControl.hasError('pattern')) {
+                        this.errorMsgs.push(locale['INVALID_PATTERN']);
+                        return;
+                    }
 
                     // custom validator, date validator?
                     const parsedCode = this.parseCode(value);
@@ -84,8 +85,8 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
                         day,
                     );
 
-                    // TODO: error use-cases - not all number digits; not valid date
-                    if (codeControl.errors || !isDateValid) {
+                    if (!isDateValid) {
+                        this.errorMsgs.push(locale['INVALID_DATE']);
                         return;
                     }
 

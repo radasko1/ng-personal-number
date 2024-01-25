@@ -38,7 +38,7 @@ export class BirthCodeComponent {
         const birthdayDate = moment([year, month - 1, day]);
 
         this.calculateGender(month);
-        this.calculateAge(year);
+        this.calculateAge(birthdayDate);
         this.calculateWeekDay(birthdayDate);
         this.calculateBirthday(birthdayDate);
     }
@@ -57,13 +57,13 @@ export class BirthCodeComponent {
 
     /**
      * Calculate age based on written personal code
-     * @param year Date year
+     * @param birthdayDate Birthday date in Moment date object
      */
-    private calculateAge(year: number) {
+    private calculateAge(birthdayDate: Moment) {
         const todayDate = moment();
-        const difference = todayDate.diff(year, 'year');
+        const difference = todayDate.diff(birthdayDate, 'years').toPrecision();
 
-        this.personInfo.set('AGE', difference.toString());
+        this.personInfo.set('AGE', difference);
     }
 
     /**
