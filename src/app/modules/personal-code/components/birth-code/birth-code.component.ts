@@ -35,9 +35,10 @@ export class BirthCodeComponent {
      */
     protected onCodeChange(code: ParsedCode) {
         const [year, month, day] = code.date;
+        const [, monthDigits] = code.digits;
         const birthdayDate = moment([year, month - 1, day]);
 
-        this.calculateGender(month);
+        this.calculateGender(monthDigits);
         this.calculateAge(birthdayDate);
         this.calculateWeekDay(birthdayDate);
         this.calculateBirthday(birthdayDate);
@@ -45,12 +46,14 @@ export class BirthCodeComponent {
 
     /**
      * Calculate gender based on written month
-     * @param month Date month (1 is for January)
+     * @param month Month in digits
      */
-    private calculateGender(month: number) {
-        if (month >= 1 && month <= 12) {
+    private calculateGender(month: string) {
+        const monthNumber = parseInt(month, 10);
+
+        if (monthNumber >= 1 && monthNumber <= 12) {
             this.personInfo.set('GENDER', locale['MALE']);
-        } else if (month >= 51 && month <= 62) {
+        } else if (monthNumber >= 51 && monthNumber <= 62) {
             this.personInfo.set('GENDER', locale['FEMALE']);
         }
     }
