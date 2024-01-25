@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { debounceTime, noop, Subject, takeUntil } from 'rxjs';
 import moment from 'moment';
@@ -40,7 +40,6 @@ import { ParsedCode } from '../../models/parsed-code.interface';
 })
 export class BirthCodeFormComponent implements OnInit, OnDestroy {
 	private subs$ = new Subject<boolean>();
-	private personalCode = new Subject<ParsedCode>();
 	protected readonly locale = locale;
 	/** Form for birth code number */
 	protected formGroup = this.fb.group({
@@ -53,7 +52,7 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
 	protected errorMsgs: string[] = [];
 
 	/** Whether the code pass pattern, then it's emitted */
-	@Output() onCodeChange$ = this.personalCode.asObservable();
+	@Output() onValueChange = new EventEmitter<ParsedCode>(); // TODO event instead of Subject?
 
 	constructor(private fb: NonNullableFormBuilder) {}
 
@@ -68,6 +67,7 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
 					if (codeControl.hasError('pattern')) {
 						this.errorMsgs.push(locale['INVALID_PATTERN']);
 						return;
+						// emit output?
 					}
 
 					// custom validator, date validator?
@@ -78,10 +78,11 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
 					if (!isDateValid) {
 						this.errorMsgs.push(locale['INVALID_DATE']);
 						return;
+						// emit output?
 					}
 
 					// whether code is not valid, don't send
-					this.personalCode.next(parsedCode);
+					this.onValueChange.next(parsedCode);
 				},
 				error: (err) => noop(),
 			});

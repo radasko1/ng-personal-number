@@ -10,7 +10,7 @@ import { ParsedCode } from '../../models/parsed-code.interface';
 @Component({
     selector: 'app-birth-code',
     template: `
-        <app-birth-code-form (onCodeChange$)="onCodeChange($event)" />
+        <app-birth-code-form (onValueChange)="onCodeChange($event)" />
         <div>
             <app-birth-code-info
                 *ngFor="

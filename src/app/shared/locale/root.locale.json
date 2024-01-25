@@ -5,6 +5,6 @@
     "BIRTHDAY_DATE": "Datum narození",
     "AGE": "Věk",
     "WEEKDAY": "Den narození",
-    "INVALID_PATTERN": "Zadaná hodnota není validní",
-    "INVALID_DATE": "Hodnota je neplatná. Zkontrolujte znovu, zda je číslo zadané správně"
+    "INVALID_PATTERN": "Hodnota neodpovídá formátu rodného čísla",
+    "INVALID_DATE": "Rodné číslo je neplatné"
 }
