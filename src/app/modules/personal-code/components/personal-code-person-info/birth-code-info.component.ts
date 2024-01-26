@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
 	selector: 'app-birth-code-info',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	template: `
 		<div
 			class="code-info flex align-center justify-start font-rubik text-[20px]"

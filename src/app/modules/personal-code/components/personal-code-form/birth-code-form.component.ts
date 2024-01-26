@@ -1,4 +1,11 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	EventEmitter,
+	OnDestroy,
+	OnInit,
+	Output,
+} from '@angular/core';
 import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { debounceTime, noop, Subject, takeUntil } from 'rxjs';
 
@@ -8,6 +15,7 @@ import { FormValue } from '../../models/form-value.interface';
 
 @Component({
 	selector: 'app-birth-code-form',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	template: `
 		<form [formGroup]="formGroup">
 			<div class="flex items-center justify-center font-open-sans font-bold">

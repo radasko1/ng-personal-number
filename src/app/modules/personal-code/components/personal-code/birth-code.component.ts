@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import moment from 'moment';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import 'moment/locale/cs.js';
 
 import locale from '../../../../shared/locale/root.locale.json';
@@ -9,6 +8,7 @@ import { PersonalCodeService } from '../../services/personal-code.service';
 
 @Component({
 	selector: 'app-birth-code',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	template: `
 		<app-birth-code-form (onValueChange)="onCodeChange($event)" />
 		<div>
