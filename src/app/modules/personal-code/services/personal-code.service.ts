@@ -18,22 +18,37 @@ export class PersonalCodeService {
 	public parseCode(codeValue: string): FormValue {
 		const code = codeValue.trim();
 
-		// string values
-		const yearDigits = code.substring(0, 2);
-		const monthDigits = code.substring(2, 4);
-		const dayDigits = code.substring(4, 6);
-
-		// number values
-		const yearNum = parseInt(yearDigits, 10);
-		const monthNum = parseInt(monthDigits, 10);
-		const day = parseInt(dayDigits, 10);
-		const year = this.getFullYear(yearNum);
-		const month = this.getFullMonth(monthNum); // may return -1
+		const [yearDigits, monthDigits, dayDigits] = this.extractDigits(code);
+		const [year, month, day] = this.getFullDate(yearDigits, monthDigits, dayDigits);
 
 		return {
 			date: [year, month, day],
 			digits: [yearDigits, monthDigits, dayDigits],
 		};
+	}
+
+	/**
+	 * Get digits from written personal code
+	 * @param code Code from user input
+	 */
+	private extractDigits(code: string): string[] {
+		return [code.substring(0, 2), code.substring(2, 4), code.substring(4, 6)];
+	}
+
+	/**
+	 * Get year and month number
+	 * @param yearDigits
+	 * @param monthDigits
+	 * @param dayDigits
+	 */
+	private getFullDate(yearDigits: string, monthDigits: string, dayDigits: string): number[] {
+		const yearNum = parseInt(yearDigits, 10);
+		const monthNum = parseInt(monthDigits, 10);
+		const day = parseInt(dayDigits, 10);
+		const year = this.getFullYear(yearNum);
+		const month = this.getFullMonth(monthNum);
+
+		return [year, month, day];
 	}
 
 	/**
