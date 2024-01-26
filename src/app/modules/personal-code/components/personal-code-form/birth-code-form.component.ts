@@ -1,10 +1,10 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { debounceTime, noop, Subject, takeUntil } from 'rxjs';
-import moment from 'moment';
 
+import { PersonalCodeService } from '../../services/personal-code.service';
 import locale from '../../../../shared/locale/root.locale.json';
-import { FormValue } from '../../models/parsed-code.interface';
+import { FormValue } from '../../models/form-value.interface';
 
 @Component({
 	selector: 'app-birth-code-form',
@@ -43,7 +43,6 @@ import { FormValue } from '../../models/parsed-code.interface';
 })
 export class BirthCodeFormComponent implements OnInit, OnDestroy {
 	private subs$ = new Subject<boolean>();
-	protected readonly locale = locale;
 	/** Form for birth code number */
 	protected formGroup = this.fb.group({
 		code: this.fb.control<string>('', {
@@ -57,7 +56,10 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
 	/** Whether the code pass pattern, then it's emitted */
 	@Output() onValueChange = new EventEmitter<FormValue | undefined>();
 
-	constructor(private fb: NonNullableFormBuilder) {}
+	constructor(
+		private fb: NonNullableFormBuilder,
+		private codeService: PersonalCodeService,
+	) {}
 
 	ngOnInit() {
 		this.formGroup.controls.code.valueChanges
@@ -67,24 +69,25 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
 					this.errorMsgs = []; // cleaning
 					const codeControl = this.formGroup.controls.code;
 
+					// written code is out of pattern
 					if (codeControl.hasError('pattern')) {
 						this.errorMsgs.push(locale['INVALID_PATTERN']);
 						this.onValueChange.next(undefined);
 						return;
 					}
 
-					// custom validator, date validator?
-					const parsedCode = this.parseCode(value);
+					// calculate data in service
+					const parsedCode = this.codeService.parseCode(value);
 					const [year, month, day] = parsedCode.date;
-					const isDateValid = this.checkDateValidity(year, month, day);
+					const isDateValid = this.codeService.checkDateValidity(year, month, day);
 
+					// written code is not valid date
 					if (!isDateValid) {
 						this.errorMsgs.push(locale['INVALID_DATE']);
 						this.onValueChange.next(undefined);
 						return;
 					}
 
-					// whether code is not valid, don't send
 					this.onValueChange.next(parsedCode);
 				},
 				error: (err) => noop(),
@@ -94,66 +97,5 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
 	ngOnDestroy() {
 		this.subs$.next(true);
 		this.subs$.unsubscribe();
-	}
-
-	/**
-	 * Parse written code into small pieces
-	 * @param codeValue Written value in form input
-	 */
-	private parseCode(codeValue: string): FormValue {
-		const code = codeValue.trim();
-
-		// string values
-		const yearDigits = code.substring(0, 2);
-		const monthDigits = code.substring(2, 4);
-		const dayDigits = code.substring(4, 6);
-
-		// number values
-		const yearNum = parseInt(yearDigits, 10);
-		const monthNum = parseInt(monthDigits, 10);
-		const day = parseInt(dayDigits, 10);
-		const year = this.getFullYear(yearNum);
-		const month = this.getFullMonth(monthNum); // may return -1
-
-		return {
-			date: [year, month, day],
-			digits: [yearDigits, monthDigits, dayDigits],
-		};
-	}
-
-	/**
-	 * Check if written date is valid
-	 * @param year Date year
-	 * @param month Date month
-	 * @param day Date day
-	 */
-	private checkDateValidity(year: number, month: number, day: number): boolean {
-		return moment([year, month - 1, day]).isValid();
-	}
-
-	/**
-	 * Get full year from personal code
-	 * @param year Last 2 digits from year
-	 */
-	private getFullYear(year: number): number {
-		// before 54 the personal code has 3 digits after slash
-		if (year >= 54 && year <= 99) {
-			return parseInt('19' + year, 10);
-		}
-		return parseInt('20' + year, 10);
-	}
-
-	/**
-	 * Get correct month from personal code
-	 * @param month Date month number
-	 */
-	private getFullMonth(month: number): number {
-		if (month >= 1 && month <= 12) {
-			return month;
-		} else if (month >= 51 && month <= 62) {
-			return month - 50;
-		} else {
-			return -1;
-		}
 	}
 }

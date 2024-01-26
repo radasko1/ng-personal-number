@@ -19,12 +19,7 @@ export class BirthCodeInfoComponent {
 	/** Data key title */
 	@Input({ required: true }) title = '';
 	/** Data key value */
-	@Input({ transform: transformValue }) value: string | undefined;
+	@Input() value: string = '';
 	/** Whether is item last in list */
 	@Input() isLast = false;
-}
-
-/** Transform function for 'value' input */
-function transformValue(value: string | undefined): string {
-	return value ?? '-';
 }
