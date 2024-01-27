@@ -7,12 +7,12 @@ import locale from '../../../shared/locale/root.locale.json';
 import { KeyValuePair } from '../../../shared/models/key-value.interface';
 
 @Component({
-	selector: 'app-birth-code',
+	selector: 'app-personal-code',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	template: `
-		<app-birth-code-form (onValueChange)="onCodeChange($event)" />
+		<app-personal-code-form (onValueChange)="onCodeChange($event)" />
 		<div>
-			<app-birth-code-info
+			<app-personal-code-person-info
 				*ngFor="let info of personInfo | keyvalue: sortFn; last as isLast"
 				[title]="locale[info.key]"
 				[value]="info.value"

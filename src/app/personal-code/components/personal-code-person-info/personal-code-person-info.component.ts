@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
-	selector: 'app-birth-code-info',
+	selector: 'app-personal-code-person-info',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	template: `
 		<div

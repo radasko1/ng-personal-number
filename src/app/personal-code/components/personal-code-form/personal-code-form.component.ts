@@ -13,7 +13,7 @@ import { FormValue } from '../../models/form-value.interface';
 import { CodeValidationService } from '../../services/code-validation.service';
 
 @Component({
-	selector: 'app-birth-code-form',
+	selector: 'app-personal-code-form',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	template: `
 		<form [formGroup]="formGroup">
