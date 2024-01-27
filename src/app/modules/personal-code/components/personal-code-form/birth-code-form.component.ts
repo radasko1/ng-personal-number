@@ -12,6 +12,7 @@ import { debounceTime, noop, Subject, takeUntil } from 'rxjs';
 import { PersonalCodeService } from '../../services/personal-code.service';
 import locale from '../../../../shared/locale/root.locale.json';
 import { FormValue } from '../../models/form-value.interface';
+import { FormErrorService } from '../../../../shared/services/form-error.service';
 
 @Component({
 	selector: 'app-birth-code-form',
@@ -37,16 +38,7 @@ import { FormValue } from '../../models/form-value.interface';
 			</div>
 		</form>
 		<!-- Form Error Message -->
-		<div class="block text-center mt-2 font-roboto text-yellow text-lg font-medium h-[20px]">
-			<div
-				*ngFor="let error of errorMsgs"
-				[class.block]="error"
-				[class.hidden]="!error"
-				class="leading-[20px]"
-			>
-				{{ error }}
-			</div>
-		</div>
+		<app-form-error />
 	`,
 })
 export class BirthCodeFormComponent implements OnInit, OnDestroy {
@@ -58,8 +50,6 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
 			validators: [Validators.pattern('[0-9]{6}')],
 		}),
 	});
-	/** Error message indicator */
-	protected errorMsgs: string[] = [];
 
 	/** Whether the code pass pattern, then it's emitted */
 	@Output() onValueChange = new EventEmitter<FormValue | undefined>();
@@ -67,6 +57,7 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
 	constructor(
 		private fb: NonNullableFormBuilder,
 		private codeService: PersonalCodeService,
+		private formErrorService: FormErrorService,
 	) {}
 
 	ngOnInit() {
@@ -74,12 +65,11 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
 			.pipe(debounceTime(800), takeUntil(this.subs$))
 			.subscribe({
 				next: (value) => {
-					this.errorMsgs = []; // cleaning
 					const codeControl = this.formGroup.controls.code;
 
 					// written code is out of pattern
 					if (codeControl.hasError('pattern')) {
-						this.errorMsgs.push(locale['INVALID_PATTERN']);
+						this.formErrorService.setError(locale['INVALID_PATTERN']);
 						this.onValueChange.next(undefined);
 						return;
 					}
@@ -91,11 +81,12 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
 
 					// written code is not valid date
 					if (!isDateValid) {
-						this.errorMsgs.push(locale['INVALID_DATE']);
+						this.formErrorService.setError(locale['INVALID_DATE']);
 						this.onValueChange.next(undefined);
 						return;
 					}
 
+					this.formErrorService.clear(); // ?
 					this.onValueChange.next(parsedCode);
 				},
 				error: (err) => noop(),
