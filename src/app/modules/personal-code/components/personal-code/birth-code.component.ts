@@ -4,7 +4,7 @@ import 'moment/locale/cs.js';
 import locale from '../../../../shared/locale/root.locale.json';
 import { KeyValuePair } from '../../../../shared/models/key-value.interface';
 import { FormValue } from '../../models/form-value.interface';
-import { PersonalCodeService } from '../../services/personal-code.service';
+import { CodeInformationService } from '../../services/code-information.service';
 
 @Component({
 	selector: 'app-birth-code',
@@ -26,7 +26,7 @@ export class BirthCodeComponent {
 	// I choose Map to keep order of assigned values
 	protected personInfo = new Map<string, string>();
 
-	constructor(private codeService: PersonalCodeService) {}
+	constructor(private informationService: CodeInformationService) {}
 
 	/**
 	 * Handle personal code written by user
@@ -40,11 +40,11 @@ export class BirthCodeComponent {
 
 		const [, monthDigits] = value.digits;
 
-		const birthdayDate = this.codeService.getBirthDate(value);
-		const gender = this.codeService.getGender(monthDigits);
-		const age = this.codeService.getAge(birthdayDate);
-		const weekday = this.codeService.getWeekDay(birthdayDate);
-		const birthday = this.codeService.getBirthday(birthdayDate);
+		const birthdayDate = this.informationService.getBirthDate(value);
+		const gender = this.informationService.getGender(monthDigits);
+		const age = this.informationService.getAge(birthdayDate);
+		const weekday = this.informationService.getWeekDay(birthdayDate);
+		const birthday = this.informationService.getBirthday(birthdayDate);
 
 		this.personInfo.set('GENDER', gender);
 		this.personInfo.set('AGE', age);

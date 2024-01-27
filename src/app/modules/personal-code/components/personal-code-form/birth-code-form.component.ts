@@ -9,10 +9,10 @@ import {
 import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { debounceTime, noop, Subject, takeUntil } from 'rxjs';
 
-import { PersonalCodeService } from '../../services/personal-code.service';
 import locale from '../../../../shared/locale/root.locale.json';
 import { FormValue } from '../../models/form-value.interface';
 import { FormErrorService } from '../../../../shared/services/form-error.service';
+import { CodeParserService } from '../../services/code-parser.service';
 
 @Component({
 	selector: 'app-birth-code-form',
@@ -56,7 +56,7 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
 
 	constructor(
 		private fb: NonNullableFormBuilder,
-		private codeService: PersonalCodeService,
+		private codeParserService: CodeParserService,
 		private formErrorService: FormErrorService,
 	) {}
 
@@ -75,9 +75,9 @@ export class BirthCodeFormComponent implements OnInit, OnDestroy {
 					}
 
 					// calculate data in service
-					const parsedCode = this.codeService.parseCode(value);
+					const parsedCode = this.codeParserService.parseCode(value);
 					const [year, month, day] = parsedCode.date;
-					const isDateValid = this.codeService.checkDateValidity(year, month, day);
+					const isDateValid = this.codeParserService.checkDateValidity(year, month, day);
 
 					// written code is not valid date
 					if (!isDateValid) {

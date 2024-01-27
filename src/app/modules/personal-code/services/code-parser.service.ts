@@ -1,16 +1,9 @@
 import { Injectable } from '@angular/core';
-import moment, { Moment } from 'moment/moment';
-
-import locale from '../../../shared/locale/root.locale.json';
+import moment from 'moment';
 import { FormValue } from '../models/form-value.interface';
 
 @Injectable()
-export class PersonalCodeService {
-	public getBirthDate(value: FormValue) {
-		const [year, month, day] = value.date;
-		return moment([year, month - 1, day]);
-	}
-
+export class CodeParserService {
 	/**
 	 * Parse written code into small pieces
 	 * @param codeValue Written value in form input
@@ -25,6 +18,16 @@ export class PersonalCodeService {
 			date: [year, month, day],
 			digits: [yearDigits, monthDigits, dayDigits],
 		};
+	}
+
+	/**
+	 * Check if written date is valid
+	 * @param year Date year
+	 * @param month Date month
+	 * @param day Date day
+	 */
+	public checkDateValidity(year: number, month: number, day: number): boolean {
+		return moment([year, month - 1, day]).isValid();
 	}
 
 	/**
@@ -75,56 +78,5 @@ export class PersonalCodeService {
 		} else {
 			return -1;
 		}
-	}
-
-	/**
-	 * Check if written date is valid
-	 * @param year Date year
-	 * @param month Date month
-	 * @param day Date day
-	 */
-	public checkDateValidity(year: number, month: number, day: number): boolean {
-		return moment([year, month - 1, day]).isValid();
-	}
-
-	/**
-	 * Calculate gender based on written month
-	 * @param month Month in digits
-	 */
-	public getGender(month: string): string {
-		const monthNumber = parseInt(month, 10);
-
-		if (monthNumber >= 1 && monthNumber <= 12) {
-			return locale['MALE'];
-		} else if (monthNumber >= 51 && monthNumber <= 62) {
-			return locale['FEMALE'];
-		}
-		// this should not happen, written code is validated, and if not valid, no personal info are shown
-		return '';
-	}
-
-	/**
-	 * Calculate age based on written personal code
-	 * @param birthdayDate Birthday date in Moment date object
-	 */
-	public getAge(birthdayDate: Moment): string {
-		const todayDate = moment();
-		return todayDate.diff(birthdayDate, 'years').toPrecision();
-	}
-
-	/**
-	 * Calculate week day from birthday date
-	 * @param birthdayDate Birthday date in Moment date object
-	 */
-	public getWeekDay(birthdayDate: Moment): string {
-		return birthdayDate.format('dddd');
-	}
-
-	/**
-	 * Calculate birthday date to locale format
-	 * @param birthdayDate Birthday date in Moment date object
-	 */
-	public getBirthday(birthdayDate: Moment): string {
-		return birthdayDate.locale('cs-cz').format('LL');
 	}
 }
