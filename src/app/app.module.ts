@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { PersonalCodeModule } from './modules/personal-code/personal-code.module';
+import { PersonalCodeModule } from './personal-code/personal-code.module';
 
 @NgModule({
     declarations: [AppComponent],

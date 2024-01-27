@@ -9,10 +9,10 @@ import {
 import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { debounceTime, noop, Subject, takeUntil } from 'rxjs';
 
-import locale from '../../../../shared/locale/root.locale.json';
 import { FormValue } from '../../models/form-value.interface';
-import { FormErrorService } from '../../../../shared/services/form-error.service';
 import { CodeParserService } from '../../services/code-parser.service';
+import locale from '../../../shared/locale/root.locale.json';
+import { FormErrorService } from '../../../shared/services/form-error.service';
 
 @Component({
 	selector: 'app-birth-code-form',

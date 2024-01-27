@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import 'moment/locale/cs.js';
 
-import locale from '../../../../shared/locale/root.locale.json';
-import { KeyValuePair } from '../../../../shared/models/key-value.interface';
 import { FormValue } from '../../models/form-value.interface';
 import { CodeInformationService } from '../../services/code-information.service';
+import locale from '../../../shared/locale/root.locale.json';
+import { KeyValuePair } from '../../../shared/models/key-value.interface';
 
 @Component({
 	selector: 'app-birth-code',

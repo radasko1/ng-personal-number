@@ -7,7 +7,7 @@ import { BirthCodeFormComponent } from './components/personal-code-form/birth-co
 import { BirthCodeInfoComponent } from './components/personal-code-person-info/birth-code-info.component';
 import { CodeInformationService } from './services/code-information.service';
 import { CodeParserService } from './services/code-parser.service';
-import { SharedModule } from '../../shared/shared.module';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
 	declarations: [BirthCodeComponent, BirthCodeFormComponent, BirthCodeInfoComponent],
