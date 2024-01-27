@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BirthCodeFormComponent } from './birth-code-form.component';
+import { PersonalCodeFormComponent } from './personal-code-form.component';
 
 describe('BirthCodeFormComponent', () => {
-    let component: BirthCodeFormComponent;
-    let fixture: ComponentFixture<BirthCodeFormComponent>;
+    let component: PersonalCodeFormComponent;
+    let fixture: ComponentFixture<PersonalCodeFormComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [BirthCodeFormComponent],
+            declarations: [PersonalCodeFormComponent],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(BirthCodeFormComponent);
+        fixture = TestBed.createComponent(PersonalCodeFormComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

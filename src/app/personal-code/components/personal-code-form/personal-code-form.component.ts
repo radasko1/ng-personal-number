@@ -39,7 +39,7 @@ import { CodeValidationService } from '../../services/code-validation.service';
 		<app-form-error />
 	`,
 })
-export class BirthCodeFormComponent implements OnInit, OnDestroy {
+export class PersonalCodeFormComponent implements OnInit, OnDestroy {
 	private subs$ = new Subject<boolean>();
 	/** Form for birth code number */
 	protected formGroup = this.fb.group({

@@ -16,7 +16,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 		</div>
 	`,
 })
-export class BirthCodeInfoComponent {
+export class PersonalCodePersonInfoComponent {
 	/** Data key title */
 	@Input({ required: true }) title = '';
 	/** Data key value */

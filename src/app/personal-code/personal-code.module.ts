@@ -2,17 +2,17 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { BirthCodeComponent } from './components/personal-code/birth-code.component';
-import { BirthCodeFormComponent } from './components/personal-code-form/birth-code-form.component';
-import { BirthCodeInfoComponent } from './components/personal-code-person-info/birth-code-info.component';
+import { PersonalCodeComponent } from './components/personal-code/personal-code.component';
+import { PersonalCodeFormComponent } from './components/personal-code-form/personal-code-form.component';
+import { PersonalCodePersonInfoComponent } from './components/personal-code-person-info/personal-code-person-info.component';
 import { CodeInformationService } from './services/code-information.service';
 import { CodeParserService } from './services/code-parser.service';
 import { CodeValidationService } from './services/code-validation.service';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-	declarations: [BirthCodeComponent, BirthCodeFormComponent, BirthCodeInfoComponent],
-	exports: [BirthCodeComponent],
+	declarations: [PersonalCodeComponent, PersonalCodeFormComponent, PersonalCodePersonInfoComponent],
+	exports: [PersonalCodeComponent],
 	imports: [CommonModule, ReactiveFormsModule, SharedModule],
 	providers: [CodeInformationService, CodeParserService, CodeValidationService],
 })

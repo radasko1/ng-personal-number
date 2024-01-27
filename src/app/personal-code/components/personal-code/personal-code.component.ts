@@ -21,7 +21,7 @@ import { KeyValuePair } from '../../../shared/models/key-value.interface';
 		</div>
 	`,
 })
-export class BirthCodeComponent {
+export class PersonalCodeComponent {
 	protected readonly locale: KeyValuePair<string> = locale;
 	// I choose Map to keep order of assigned values
 	protected personInfo = new Map<string, string>();
