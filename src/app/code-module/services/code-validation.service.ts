@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import locale from '../../shared/locale/root.locale.json';
+import locale from '../personal-code.locale.json';
 import { CodeParserService } from './code-parser.service';
 import { FormValue } from '../models/form-value.interface';
 import { ErrorService } from '../../error-module/services/error.service';

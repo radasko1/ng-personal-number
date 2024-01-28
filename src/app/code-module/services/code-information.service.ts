@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import moment, { Moment } from 'moment/moment';
 
-import locale from '../../shared/locale/root.locale.json';
+import locale from '../personal-code.locale.json';
 import { FormValue } from '../models/form-value.interface';
 
 @Injectable()
