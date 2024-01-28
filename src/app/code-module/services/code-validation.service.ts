@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import locale from '../../shared/locale/root.locale.json';
-import { FormErrorService } from '../../shared/services/form-error.service';
 import { CodeParserService } from './code-parser.service';
 import { FormValue } from '../models/form-value.interface';
+import { ErrorService } from '../../error-module/services/error.service';
 
 @Injectable()
 export class CodeValidationService {
 	constructor(
-		private errorService: FormErrorService,
+		private errorService: ErrorService,
 		private codeParser: CodeParserService,
 	) {}
 

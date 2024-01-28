@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { FormErrorService } from '../../services/form-error.service';
+import { ErrorService } from '../../services/error.service';
 
 @Component({
-	selector: 'app-form-error',
+	selector: 'app-error',
 	template: `
 		<div class="block text-center mt-2 font-roboto text-yellow text-lg font-medium h-[20px]">
 			<div *ngIf="errorService.hasError$ | async" class="leading-[20px]">
@@ -13,6 +13,6 @@ import { FormErrorService } from '../../services/form-error.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FormErrorComponent {
-	constructor(protected errorService: FormErrorService) {}
+export class ErrorComponent {
+	constructor(protected errorService: ErrorService) {}
 }

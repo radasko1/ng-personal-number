@@ -8,12 +8,12 @@ import { PersonalCodePersonInfoComponent } from './components/personal-code-pers
 import { CodeInformationService } from './services/code-information.service';
 import { CodeParserService } from './services/code-parser.service';
 import { CodeValidationService } from './services/code-validation.service';
-import { SharedModule } from '../shared/shared.module';
+import { ErrorModule } from '../error-module/error.module';
 
 @NgModule({
 	declarations: [PersonalCodeComponent, PersonalCodeFormComponent, PersonalCodePersonInfoComponent],
 	exports: [PersonalCodeComponent],
-	imports: [CommonModule, ReactiveFormsModule, SharedModule],
+	imports: [CommonModule, ReactiveFormsModule, ErrorModule],
 	providers: [CodeInformationService, CodeParserService, CodeValidationService],
 })
 export class PersonalCodeModule {}

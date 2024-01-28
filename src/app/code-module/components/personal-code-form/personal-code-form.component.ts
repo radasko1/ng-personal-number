@@ -25,7 +25,7 @@ import { CodeValidationService } from '../../services/code-validation.service';
 			</div>
 		</form>
 		<!-- Form Error Message -->
-		<app-form-error />
+		<app-error />
 	`,
 })
 export class PersonalCodeFormComponent implements OnInit, OnDestroy {

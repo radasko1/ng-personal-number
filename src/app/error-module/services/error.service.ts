@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
 @Injectable()
-export class FormErrorService {
+export class ErrorService {
 	private errorMessage: string | undefined;
 	private hasError = new Subject<boolean>();
 
@@ -13,7 +13,10 @@ export class FormErrorService {
 		return this.errorMessage;
 	}
 
-	/** Set new error */
+	/**
+	 * Set new error message
+	 * @param errorMessage Message
+	 */
 	public setError(errorMessage: string) {
 		this.errorMessage = errorMessage;
 		this.hasError.next(true);

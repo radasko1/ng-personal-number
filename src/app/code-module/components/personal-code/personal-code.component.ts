@@ -54,6 +54,7 @@ export class PersonalCodeComponent {
 
 	/**
 	 * KeyValue pipe compare function
+	 * Serves list order
 	 */
 	protected sortFn(): number {
 		return 0;
