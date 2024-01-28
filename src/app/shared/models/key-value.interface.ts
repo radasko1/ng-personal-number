@@ -1,3 +1,3 @@
 export interface KeyValuePair<T> {
-  [key: string]: T;
+	[key: string]: T;
 }

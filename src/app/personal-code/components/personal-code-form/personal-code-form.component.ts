@@ -1,11 +1,4 @@
-import {
-	ChangeDetectionStrategy,
-	Component,
-	EventEmitter,
-	OnDestroy,
-	OnInit,
-	Output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { debounceTime, noop, Subject, takeUntil } from 'rxjs';
 
@@ -27,12 +20,8 @@ import { CodeValidationService } from '../../services/code-validation.service';
 					tabindex="0"
 					autofocus
 				/>
-				<label class="text-[60px] inline-block mx-2.5 leading-[60px] select-none">
-					&#8725;
-				</label>
-				<label class="text-[50px] inline-block leading-[50px] select-none">
-					&Star;&Star;&Star;&Star;
-				</label>
+				<label class="text-[60px] inline-block mx-2.5 leading-[60px] select-none">&#8725;</label>
+				<label class="text-[50px] inline-block leading-[50px] select-none">&Star;&Star;&Star;&Star;</label>
 			</div>
 		</form>
 		<!-- Form Error Message -->
@@ -58,17 +47,15 @@ export class PersonalCodeFormComponent implements OnInit, OnDestroy {
 	) {}
 
 	ngOnInit() {
-		this.formGroup.controls.code.valueChanges
-			.pipe(debounceTime(800), takeUntil(this.subs$))
-			.subscribe({
-				next: () => {
-					const codeControl = this.formGroup.controls.code;
-					const value = this.codeValidation.validate(codeControl);
+		this.formGroup.controls.code.valueChanges.pipe(debounceTime(800), takeUntil(this.subs$)).subscribe({
+			next: () => {
+				const codeControl = this.formGroup.controls.code;
+				const value = this.codeValidation.validate(codeControl);
 
-					this.onValueChange.next(value);
-				},
-				error: (err: any) => noop(),
-			});
+				this.onValueChange.next(value);
+			},
+			error: (err: any) => noop(),
+		});
 	}
 
 	ngOnDestroy() {

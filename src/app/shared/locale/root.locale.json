@@ -1,10 +1,10 @@
 {
-    "MALE": "muž",
-    "FEMALE": "žena",
-    "GENDER": "Pohlaví",
-    "BIRTHDAY_DATE": "Datum narození",
-    "AGE": "Věk",
-    "WEEKDAY": "Den narození",
-    "INVALID_PATTERN": "Hodnota neodpovídá formátu rodného čísla",
-    "INVALID_DATE": "Rodné číslo je neplatné"
+	"MALE": "muž",
+	"FEMALE": "žena",
+	"GENDER": "Pohlaví",
+	"BIRTHDAY_DATE": "Datum narození",
+	"AGE": "Věk",
+	"WEEKDAY": "Den narození",
+	"INVALID_PATTERN": "Hodnota neodpovídá formátu rodného čísla",
+	"INVALID_DATE": "Rodné číslo je neplatné"
 }

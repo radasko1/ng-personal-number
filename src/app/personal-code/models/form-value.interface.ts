@@ -1,4 +1,4 @@
 export interface FormValue {
-    date: number[];
-    digits: string[];
+	date: number[];
+	digits: string[];
 }

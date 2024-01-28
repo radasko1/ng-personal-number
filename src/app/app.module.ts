@@ -5,9 +5,9 @@ import { AppComponent } from './app.component';
 import { PersonalCodeModule } from './personal-code/personal-code.module';
 
 @NgModule({
-    declarations: [AppComponent],
-    imports: [BrowserModule, PersonalCodeModule],
-    providers: [],
-    bootstrap: [AppComponent],
+	declarations: [AppComponent],
+	imports: [BrowserModule, PersonalCodeModule],
+	providers: [],
+	bootstrap: [AppComponent],
 })
 export class AppModule {}
